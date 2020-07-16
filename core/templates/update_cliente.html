@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %} ATUALIZAR Cliente {% endblock %}
+
+{% block content %}
+<h3>Atualizar CLiente</h3><hr>
+<div class="row"><!-- end div da row-form que-->
+    <div class="col col-md3"></div> <!-- div que cria uma coluna a esquerda do form-->
+    <div class="col col-md-6 text-align"><!--div do form-->
+        <form method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+            {% endbuttons %}
+
+        </form>
+    </div><!--end div form-->
+    <div class="col col-md3"></div><!-- end div que cria uma coluna a direita do form-->
+</div><!-- end div da row-form que-->
+
+{% endblock %}

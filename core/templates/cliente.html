@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} Cliente {% endblock %}
+
+{% block content %}
+<br>
+  <div class="card">
+  <div class="card-header text-center">
+    <h4>Clientes</h4>
+  </div>
+  <div class="card-body">
+    <table class="table">
+      <thead >
+        <tr>
+          <th scope="col">nome</th>
+          <th scope="col">sobrenome</th>
+          <th scope="col">sexo</th>
+          <th scope="col">e-mail</th>
+          <th>ação</th>
+          <th><a href="{% url 'new_cliente' %}"><span class="badge badge-success text-center">Novo</span></a></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for clientes in cliente %}
+        <tr>
+          <td>{{ clientes.nome }}</td>
+          <td>{{ clientes.sobrenome }}</td>
+          <td>{{ clientes.sexo }}</td>
+          <td>{{ clientes.email }}</td>
+          <td><a href="{% url 'update_cliente' clientes.id %}"><span class="badge badge-warning">edita</span></a></td>
+          <td><a href="{% url 'delete_cliente' clientes.id %}"><span class="badge badge-danger">Apagar</span></a></td>
+
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
