@@ -4,20 +4,23 @@
 
 {% block content %}
 <br>
-  <div class="card">
+  <div class="card ">
   <div class="card-header text-center">
     <h4>Clientes</h4>
   </div>
   <div class="card-body">
     <table class="table">
-      <thead >
+      <thead class="dark bg-light" >
         <tr>
-          <th scope="col">nome</th>
+          <th scope="col" class="light">nome</th>
           <th scope="col">sobrenome</th>
           <th scope="col">sexo</th>
           <th scope="col">e-mail</th>
+          <!-- se o usuario estiver logado, tera pemissão para visualizar as ações permitidas-->
+          {% if user.is_authenticated %}
           <th>ação</th>
           <th><a href="{% url 'new_cliente' %}"><span class="badge badge-success text-center">Novo</span></a></th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -27,13 +30,32 @@
           <td>{{ clientes.sobrenome }}</td>
           <td>{{ clientes.sexo }}</td>
           <td>{{ clientes.email }}</td>
+          {% if user.is_authenticated %}
           <td><a href="{% url 'update_cliente' clientes.id %}"><span class="badge badge-warning">edita</span></a></td>
           <td><a href="{% url 'delete_cliente' clientes.id %}"><span class="badge badge-danger">Apagar</span></a></td>
-
+          {% endif %}
         </tr>
       {% endfor %}
       </tbody>
     </table>
+    <!--Inicio da paginação-->
+   <div class="pagination">
+    <span class="step-links">
+        {% if cliente.has_previous %}
+            <a href="?page=1">&laquo; inicio</a>
+            <a href="?page={{ cliente.previous_page_number }}">voltar</a>
+        {% endif %}
+
+        <span class="current">
+            Pagina {{ cliente.number }} de {{ cliente.paginator.num_pages }}.
+        </span>
+
+        {% if cliente.has_next %}
+            <a href="?page={{ cliente.next_page_number }}">proximo</a>
+            <a href="?page={{ cliente.paginator.num_pages }}">ultimo &raquo;</a>
+        {% endif %}
+    </span>
+   </div>
   </div>
 </div>
 

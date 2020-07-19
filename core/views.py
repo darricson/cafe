@@ -1,22 +1,70 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
 from django.contrib import messages
-from .models import Cliente
-from .forms import ClienteModel, ClienteForm
+from .models import Cliente, Produto
+from .forms import ClienteModel, ProdutoModel
 
 
 def index(request):
     return render(request, 'index.html')
 
 
-def produto(request):
-    return render(request, 'produto.html')
+def new_produto(request):
+    if str(request.method) == 'POST':
+        form = ProdutoModel(request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Produto cadastrado com sucesso')
+            form = ProdutoModel()
+            return redirect('produto')
+        else:
+            messages.error(request, 'Erro ao cadastrar o produto')
+    else:
+        form = ProdutoModel()
+
+    context = {'form': form}
+    return render(request, 'new_produto.html', context)
+
+
+def produtos(request):
+    produto = Produto.objects.all().order_by('-id')
+    paginator = Paginator(produto, 5)
+    page = request.GET.get('page')
+    produto = paginator.get_page(page)
+    context = {'produto': produto}
+    return render(request, 'produto.html', context)
+
+
+def update_produto(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    form = ProdutoModel(request.POST or None, instance=produto)
+    if form.is_valid():
+        produto = form.save()
+        produto.save()
+        return redirect('produto')
+    context = {'form': form}
+    return render(request, 'update_produto.html', context)
+
+
+def delete_produto(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    if request.method == 'POST':
+        produto.delete()
+        return redirect('produto')
+    context = {'produto': produto}
+    return render(request, 'delete_produto.html', context)
+
 
 
 def cliente(request):
-    clientes = Cliente.objects.all
-    context = {
-        'cliente': clientes
-    }
+
+    # instncia o model e ordena a listagem por o ultimo elemento cadastrado
+    clientes = Cliente.objects.all().order_by('-id')
+    # paginação
+    paginator = Paginator(clientes, 6)
+    page = request.GET.get('page')
+    clientes = paginator.get_page(page)
+    context = {'cliente': clientes}
     return render(request, 'cliente.html', context)
 
 
@@ -66,7 +114,6 @@ def cliente_update(request, id):
 def cliente_detail(request, id):
     clientes = get_object_or_404(Cliente, pk=id)
     context = {'clientes': clientes}
-
     return render(request, 'detail_cliente.html', context)
 
 
@@ -78,6 +125,12 @@ def cliente_delete(request, id):
     context = {'clientes': clientes}
 
     return render(request, 'delete_cliente.html', context)
+
+
+
+
+
+
 
 
 

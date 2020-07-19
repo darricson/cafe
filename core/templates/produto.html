@@ -1,10 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Produto</title>
-</head>
-<body>
-    <h2>Produto</h2>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %} Produto {% endblock %}
+
+{% block content %}
+<br>
+  <div class="card ">
+  <div class="card-header text-center">
+    <h4>Produtos</h4>
+  </div>
+  <div class="card-body">
+    <table class="table">
+      <thead class="dark bg-light" >
+        <tr>
+          <th scope="col" class="light">Nome</th>
+          <th scope="col">Marca</th>
+          <th scope="col">Estado</th>
+          <!-- se o usuario estiver logado, tera pemissão para visualizar as ações permitidas-->
+          {% if user.is_authenticated %}
+          <th>ação</th>
+          <th><a href="{% url 'new_produto' %}"><span class="badge badge-success text-center">Novo</span></a></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+      {% for produto in produto %}
+        <tr>
+          <td>{{ produto.nome }}</td>
+          <td>{{ produto.marca }}</td>
+          <td>{{ produto.estado }}</td>
+          {% if user.is_authenticated %}
+          <td><a href="{% url 'update_produto' produto.id %}"><span class="badge badge-warning">edita</span></a></td>
+          <td><a href="{% url 'delete_produto' produto.id %}"><span class="badge badge-danger">Apagar</span></a></td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <!--Inicio da paginação-->
+   <div class="pagination">
+    <span class="step-links">
+        {% if produto.has_previous %}
+            <a href="?page=1">&laquo; inicio</a>
+            <a href="?page={{ produto.previous_page_number }}">voltar</a>
+        {% endif %}
+
+        <span class="current">
+            Pagina {{ produto.number }} de {{ produto.paginator.num_pages }}.
+        </span>
+
+        {% if produto.has_next %}
+            <a href="?page={{ produto.next_page_number }}">proximo</a>
+            <a href="?page={{ produto.paginator.num_pages }}">ultimo &raquo;</a>
+        {% endif %}
+    </span>
+   </div>
+  </div>
+</div>
+
+{% endblock %}

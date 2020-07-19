@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Delete | Produto {% endblock %}
+
+{% block content %}
+      <br><div class="card-header text-center">
+        <h4>Apagar Produto</h4><br>
+      </div><br>
+      <div class="card">
+          <form method="POST">
+              {% csrf_token %}
+              <div class="card-header">
+               Apagar registro
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Atenção!</h5>
+                  <p class="card-text">Você tem certeza que deseja apagar o registro <h3>{{ produto.nome }}</h3></p>
+                  <button class="btn btn-danger" type="submit" value="Apagar">Apagar</button>
+                <a href="{% url 'produto' %}" class="btn btn-primary">cancela</a>
+              </div>
+          </form>
+      </div>
+
+{% endblock %}

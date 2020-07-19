@@ -1,13 +1,12 @@
 from django.db import models
 
-# Create your models here.
 
 class Produto(models.Model):
 
     situacao = [
-        ('n', 'novo'),
-        ('u', 'usado'),
-        ('r', 'recuperado'),
+        ('novo', 'novo'),
+        ('usado', 'usado'),
+        ('recuperado', 'recuperado'),
     ]
     processador = [
         ('core', 'core 2duo'),
@@ -33,7 +32,6 @@ class Produto(models.Model):
         ('2', '2 tb'),
     ]
 
-
     nome = models.CharField('Nome', max_length=45)
     marca = models.CharField('Marca', max_length=45)
     estado = models.CharField('Estado', max_length=10, choices=situacao)
@@ -47,8 +45,9 @@ class Produto(models.Model):
     def __str__(self):
         return self.nome
 
+
 class Cliente(models.Model):
-    #criação de um choice, escolha a ser feita sobre um tipo
+    # criação de um choice, escolha a ser feita sobre um tipo
     status = (
 
         ('M', 'masculino'),
@@ -62,3 +61,4 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nome
+
